@@ -3,7 +3,6 @@ package chat
 import (
 	"github.com/gorilla/websocket"
 	"net/http"
-	"fmt"
 )
 
 type Connection struct {
@@ -24,7 +23,6 @@ func (this *Connection) reader() {
 
 func (this *Connection) writer() {
 	for message := range this.send {
-
 		err := this.ws.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
 			break
@@ -38,14 +36,13 @@ var upgrader = &websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
 func WsHandler(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println(err);
 		return 
 	}
 	conn := &Connection{send: make(chan []byte, 256), ws: ws}
 	H.register <- conn
-	defer func() {H.unregister <- conn }()
 	go conn.writer()
 	conn.reader()
+	defer func() {H.unregister <- conn }()
 }
 
 

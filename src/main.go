@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"text/template"
 	"chat"
-	"fmt"
 )
 
 var (
@@ -31,7 +30,6 @@ func homeHandler(resp http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	fmt.Println(*addr);
 	h := chat.H
 	flag.Parse()
 	homeTempl = template.Must(template.ParseFiles(filepath.Join("/Users/henry-sun/data/www/my-go-chat/src/chat/home.html")))
